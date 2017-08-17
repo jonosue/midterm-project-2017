@@ -3,7 +3,7 @@ function calc_total(){
     $('.input-amount').each(function(){
         sum += parseFloat($(this).text());
     });
-
+    $(".preview-total").text(sum);
 }
 $(document).on('click', '.input-remove-row', function(){
     var tr = $(this).closest('tr');
@@ -13,15 +13,12 @@ $(document).on('click', '.input-remove-row', function(){
     });
 });
 
-
-
-
 $(function(){
     $('.preview-add-button').click(function(){
         var form_data = {};
+        var mydate = $('.payment-form input[name="date"]').val().replace(/T/i, ' At ');
+        form_data["date"] = mydate;
 
-        form_data["date"] = $('.payment-form input[name="date"]').val();
-        form_data["remove-row"] = '<span class="glyphicon glyphicon-remove"></span>';
         var row = $('<tr></tr>');
         $.each(form_data, function( type, value ) {
             $('<td class="input-'+type+'"></td>').html(value).appendTo(row);
