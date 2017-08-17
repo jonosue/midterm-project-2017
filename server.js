@@ -8,7 +8,6 @@ const express     = require("express");
 const bodyParser  = require("body-parser");
 const sass        = require("node-sass-middleware");
 const app         = express();
-
 const knexConfig  = require("./knexfile");
 const knex        = require("knex")(knexConfig[ENV]);
 const morgan      = require('morgan');
@@ -21,10 +20,8 @@ const usersRoutes = require("./routes/users");
 // 'dev' = Concise output colored by response status for development use.
 //         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
 app.use(morgan('dev'));
-
 // Log knex SQL queries to STDOUT as well
 app.use(knexLogger(knex));
-
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/styles", sass({
@@ -33,15 +30,45 @@ app.use("/styles", sass({
   debug: true,
   outputStyle: 'expanded'
 }));
+
 app.use(express.static("public"));
 
 // Mount all resource routes
 app.use("/api/users", usersRoutes(knex));
 
+function generateRandomString() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let randomString = "";
+  for (let i = 0; i < 10; i++) {
+    randomString += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return randomString;
+}
+
 // Home page
 app.get("/", (req, res) => {
   res.render("index");
 });
+
+
+app.post("/create", (req, res) => {
+  const id = generateRandomString();
+  const userID = req.session.user_id;
+  res.redirect("/:shortURL/create");
+});
+
+
+app.get("/:shortURL/create", (req, res) => {
+  res.render("create");
+});
+
+// app.post("/:shortURL/dates", (req, res) => {
+// });
+
+app.get("/:shortURL", (req, res) => {
+  res.render("event");
+});
+
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);
