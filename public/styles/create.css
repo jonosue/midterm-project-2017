@@ -60,6 +60,7 @@ input::-webkit-input-placeholder {
 }
 .form-control {
     height: auto!important;
+    width:auto;
 padding: 8px 12px !important;
 }
 .input-group {
@@ -116,4 +117,6 @@ span.input-group-addon i {
   text-align: center;
 }
 
-
+.event-info{
+  margin-top: 50px;
+}
