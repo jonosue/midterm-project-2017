@@ -1,0 +1,7 @@
+ table.plan td{
+  text-align: center;
+}
+
+table.plan tr:first-child {
+  text-align: left;
+ }
