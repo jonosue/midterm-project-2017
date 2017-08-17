@@ -47,13 +47,14 @@ function generateRandomString() {
 
 // Home page
 app.get("/", (req, res) => {
+  //const user = req.session.user_id;
   res.render("index");
 });
 
 
 app.post("/create", (req, res) => {
-  const id = generateRandomString();
-  const userID = req.session.user_id;
+  const cookie = generateRandomString();
+  const user = req.session.user_id;
   res.redirect("/:shortURL/create");
 });
 
