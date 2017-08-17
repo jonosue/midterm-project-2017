@@ -1,10 +1,4 @@
-function calc_total(){
-    var sum = 0;
-    $('.input-amount').each(function(){
-        sum += parseFloat($(this).text());
-    });
-    $(".preview-total").text(sum);
-}
+
 $(document).on('click', '.input-remove-row', function(){
     var tr = $(this).closest('tr');
     tr.fadeOut(200, function(){
@@ -24,6 +18,10 @@ $(function(){
             $('<td class="input-'+type+'"></td>').html(value).appendTo(row);
         });
         $('.preview-table > tbody:last').append(row);
-        calc_total();
+
+        //console.logging (all the dates)
+        $(".preview-table tbody tr td").each(function( index, value ) {
+        console.log( index + ": " + $(value).text() );
+        });
     });
 });
