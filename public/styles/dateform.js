@@ -12,6 +12,7 @@ $(function(){
         var form_data = {};
         var mydate = $('.payment-form input[name="date"]').val().replace(/T/i, ' At ');
         form_data["date"] = mydate;
+        form_data["remove-row"] = '<button>DELETE</button>';
 
         var row = $('<tr></tr>');
         $.each(form_data, function( type, value ) {
