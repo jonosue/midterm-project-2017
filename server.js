@@ -79,7 +79,7 @@ app.get("/", (req, res) => {
 
 app.post("/create", (req, res) => {
   const shortURL = generateRandomString();
-  const cookie = generateRandomString();
+  const cookieVal = generateRandomString();
   checkUser(req.body.email, function(count) {
     if (count) {
       knex('users')
@@ -89,28 +89,42 @@ app.post("/create", (req, res) => {
         last_name: req.body.lastname
       })
       .asCallback(function (err, result) {
+        adminCheck(req.body.email, function(id) {
+        knex('events')
+        .insert({name: req.body.eventname,
+        description: req.body.eventdescription,
+        location: req.body.location,
+        short_url: shortURL,
+        admin_id: id,
+        cookie_value: cookieVal
+        })
+        .asCallback(function (err, result) {
+        });
+      });
      });
     }
     else {
       knex('users')
       .insert({first_name: req.body.firstname, last_name: req.body.lastname, email: req.body.email})
       .asCallback(function (err, result) {
-     });
+        adminCheck(req.body.email, function(id) {
+        knex('events')
+        .insert({name: req.body.eventname,
+        description: req.body.eventdescription,
+        location: req.body.location,
+        short_url: shortURL,
+        admin_id: id,
+        cookie_value: cookieVal
+        })
+        .asCallback(function (err, result) {
+        });
+      });
+    });
     }
   });
 
-adminCheck(req.body.email, function(id) {
-  knex('events')
-  .insert({name: req.body.eventname,
-    description: req.body.eventdescription,
-    location: req.body.location,
-    short_url: shortURL,
-    admin_id: id,
-    cookie_value: cookie
-  })
-  .asCallback(function (err, result) {
-  });
-});
+  req.session.admin_id = cookieVal;
+
 
   res.redirect(`/${shortURL}/create`);
 });
