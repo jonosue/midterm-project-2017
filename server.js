@@ -79,6 +79,7 @@ app.get("/", (req, res) => {
 
 app.post("/create", (req, res) => {
   const shortURL = generateRandomString();
+  const cookie = generateRandomString();
   checkUser(req.body.email, function(count) {
     if (count) {
       knex('users')
@@ -99,24 +100,17 @@ app.post("/create", (req, res) => {
   });
 
 adminCheck(req.body.email, function(id) {
-  const cookie = generateRandomString();
   knex('events')
   .insert({name: req.body.eventname,
     description: req.body.eventdescription,
     location: req.body.location,
     short_url: shortURL,
     admin_id: id,
-    cookie_value: cookie,
+    cookie_value: cookie
   })
   .asCallback(function (err, result) {
-    req.session.user_id = cookie;
   });
 });
-
-
-
-
-
 
   res.redirect(`/${shortURL}/create`);
 });
