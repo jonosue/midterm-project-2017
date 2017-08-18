@@ -3,10 +3,8 @@
     <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
     <!-- Website CSS style -->
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="../styles/event.css" type='text/css'>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
@@ -14,98 +12,109 @@
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
-    <title>Admin</title>
+    <title>Doodle Events</title>
   </head>
   <body>
- <div class="container">
-    <div class="row">
-    <table class=
-    "plan table table-hover table-bordered table-striped text-center">
+
+  <div class="container">
+    <h2>Please add your Information... </h2>
+    <!-- <h4>First Name :&nbsp;&nbsp;&nbsp;&nbsp;<input type="textbox" name="firstname"></h4>
+    <h4>Last Name :&nbsp;&nbsp;&nbsp;&nbsp;<input type="textbox" name="lastname"> </h4>
+    <h4>Email : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="textbox" name="email"> </h4> -->
+<table>
+        <thead>
+            <tr>
+                <th colspan="">User</th>
+                <th colspan="">
+                    First Name </th>
+                <th colspan="">
+                    Last Name
+                </th>
+                <th colspan="">
+                    Email
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan=""></td>
+                <td colspan=""><input type="text" id ="firstname" value=""></td>
+                <td colspan=""><input type="text" id ="firstname" value=""></td>
+                <td colspan=""><input type="text" id ="firstname" value=""></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+<div class="container">
+    <table>
+    <h2 style="margin-top: 50px">Choose your availability</h2>
+        <thead>
+            <tr>
+                <th colspan="">Dates =>
+                </th>
+                <th colspan="">
+                    <h5>Date</h5>
+                </th>
+                <th colspan="">
+                    <h5>Date</h5>
+                </th>
+                <th colspan="">
+                    <h5>Date</h5>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan=""></td>
+                <td colspan=""><input type="checkbox" name="checked" value=""></td>
+                <td colspan=""><input type="checkbox" name="checked" value=""></td>
+                <td colspan=""><input type="checkbox" name="checked" value=""></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<button name="update" style="padding:5px">Update</button>
+
+<div class="container">
+    <table>
+    <h2 style="margin-top: 50px"> Final List of Participants </h2>
         <thead>
             <tr>
                 <th colspan="">
-                    <h2></h2>
-                </th>
-
-                <th colspan="">
-                    <h5>Date< ></h5>
-                    <!-- <p class="muted">...</p>-->
-                   <!--  <div class="plan-action">
-                        <a class="btn btn-primary btn-block btn-large" href=
-                        "https://cloud.meetingresult.com/signup/trial">Sign Up
-                        Now</a>
-                    </div> -->
-                </th>
-
-                <th colspan="">
-                    <h5>< ></h5>
+                    Participants
                 </th>
                 <th colspan="">
-                    <h5>< ></h5>
-<!--
+                    <h5>Date</h5>
+                </th>
                 <th colspan="">
-                    <h5>< ></h5>
-                </th> -->
+                    <h5>Date</h5>
+                </th>
+                <th colspan="">
+                    <h5>Date</h5>
             </tr>
         </thead>
-
         <tbody>
             <tr>
-                <td colspan="">Participants</td>
-
-                <td colspan="">< .. ></td>
-
-                <td colspan="">< ... ></td>
-
-                <!-- <td colspan="">< .... ></td> -->
-                <td></td>
+                <td colspan="">Admin</td>
+                <td colspan="">✔</td>
+                <td colspan="">✔</td>
+                <td colspan="">✔</td>
             </tr>
-
             <tr>
-                <td colspan="">User 1</td>
+                <td colspan="">User</td>
                 <td colspan="">✔</td>
-                <td colspan="">✔</td>
-                <td colspan="">✔</td>
-
-                <!-- <td><button class="delete">Delete</button></td> -->
+                <td colspan="">✗</td>
+                <td colspan="">✗</td>
             </tr>
-
-            <tr>
-                <td colspan="">User 2</td>
-
-                <td colspan="">✔</td>
-                <td colspan="">✔</td>
-                <td colspan="">✔</td>
-
-                <!-- <td><button class="delete">Delete</button></td> -->
-            </tr>
-
-            <tr>
-                <td colspan="">User 3</td>
-
-                <!-- <td colspan="2">✗</td> -->
-                <!-- <td colspan="2">✔</td> -->
-                <!-- <td colspan=""><input type="checkbox" name="" value=""></td>
-                <td colspan=""><input type="checkbox" name="" value=""></td> -->
-                <td colspan="">✔</td>
-                <td colspan="">✔</td>
-                <td colspan="">✔</td>
-                <!-- <td><button>Delete</button></td> -->
-
-            </tr>
-
         </tbody>
     </table>
-
-
-
-    <button>Done</button>
-    </div>
 </div>
 
      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+
   </body>
 </html>
