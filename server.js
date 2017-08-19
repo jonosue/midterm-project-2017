@@ -199,6 +199,7 @@ app.post("/vote", (req, res) => {
           console.log(rows);
           let shortURL = rows[0].short_url;
           res.redirect(`/${shortURL}`);
+          req.session = null;
         });
       }
       else {
@@ -211,7 +212,7 @@ app.post("/vote", (req, res) => {
 
 app.get("/:shortURL", (req, res) => {
 
-   knex.from('events')
+  knex.from('events')
   .orderBy('events_responses.user_id', 'asc', 'events_dates.id', 'asc')
   .where('events.short_url', req.params.shortURL)
   .leftJoin('events_dates', 'events.id', 'events_dates.event_id')
@@ -230,11 +231,13 @@ app.get("/:shortURL", (req, res) => {
       console.log("Events dates object: ", eventDates);
       res.render('vote', { user_summary: userResponses, event_dates: eventDates });
     });
-  })
-
+  });
 
 });
 
+app.post("/response", (req, res) => {
+  console.log(req.body);
+});
 
 
 app.listen(PORT, () => {
