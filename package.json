@@ -21,6 +21,8 @@
     "knex-logger": "^0.1.0",
     "morgan": "^1.7.0",
     "node-sass-middleware": "^0.9.8",
+    "npm-install-package": "^2.1.0",
+    "npm-install-retry": "^1.1.0",
     "pg": "^6.0.2"
   },
   "devDependencies": {
