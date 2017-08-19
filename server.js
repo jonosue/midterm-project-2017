@@ -1,7 +1,5 @@
 "use strict";
-
 require('dotenv').config();
-
 const PORT        = process.env.PORT || 8080;
 const ENV         = process.env.ENV || "development";
 const express     = require("express");
@@ -13,10 +11,8 @@ const knex        = require("knex")(knexConfig[ENV]);
 const morgan      = require('morgan');
 const knexLogger  = require('knex-logger');
 const cookieSession = require('cookie-session');
-
 // Seperated Routes for each Resource
 const usersRoutes = require("./routes/users");
-
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
 //         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
@@ -26,7 +22,6 @@ app.use(cookieSession({
   secret: 'hello-world',
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }));
-
 // Log knex SQL queries to STDOUT as well
 app.use(knexLogger(knex));
 app.set("view engine", "ejs");
@@ -37,12 +32,9 @@ app.use("/styles", sass({
   debug: true,
   outputStyle: 'expanded'
 }));
-
 app.use(express.static("public"));
-
 // Mount all resource routes
 app.use("/api/users", usersRoutes(knex));
-
 function generateRandomString() {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let randomString = "";
@@ -51,7 +43,6 @@ function generateRandomString() {
   }
   return randomString;
 }
-
 function checkUser(emailCheck, cb) {
    knex('users').where({email: emailCheck}).count('email')
   .asCallback(function (err, result) {
@@ -59,7 +50,6 @@ function checkUser(emailCheck, cb) {
     cb(countValue);
   });
 }
-
 function adminCheck(emailCheck, cb) {
     knex('users')
     .select('id')
@@ -69,7 +59,6 @@ function adminCheck(emailCheck, cb) {
       cb(idValue);
     });
 }
-
 function cookieCheck(urlCheck, cb) {
     knex('events')
     .select('cookie_value')
@@ -79,14 +68,20 @@ function cookieCheck(urlCheck, cb) {
       cb(cookieValue);
     });
 }
-
+function findEventID(cookieCheck, cb) {
+    knex('events')
+    .select('id')
+    .where({cookie_value: cookieCheck})
+    .asCallback(function (err, result) {
+      const eventIDValue = result[0].id;
+      cb(eventIDValue);
+    });
+}
 // Home page
 app.get("/", (req, res) => {
   //const user = req.session.user_id;
   res.render("index");
 });
-
-
 app.post("/create", (req, res) => {
   const shortURL = generateRandomString();
   const cookieVal = generateRandomString();
@@ -142,22 +137,56 @@ app.post("/create", (req, res) => {
     });
   }
 });
-
-
 app.get("/:shortURL/create", (req, res) => {
   cookieCheck(req.params.shortURL, function(cv) {
     if (req.session.admin_id == cv) {
+    findEventID(req.session.admin_id, function(id) {
+    knex('events_dates')
+    .where({ event_id: id })
+    .delete()
+    .asCallback(function (err, result) {
       res.render("datesadd");
+    });
+  });
     }
     else {
       res.redirect('/');
     }
   });
 });
-
-// app.post("/:shortURL/dates", (req, res) => {
-// });
-
+app.post("/date_individual", (req, res) => {
+  findEventID(req.session.admin_id, function(id) {
+    knex('events_dates')
+    .insert({
+      datetime: req.body.date,
+      event_id: id
+    })
+    .asCallback(function (err, result) {
+    });
+  });
+});
+app.post("/vote", (req, res) => {
+  findEventID(req.session.admin_id, function(id) {
+    knex('events_dates')
+    .where({ event_id: id })
+    .select('event_id')
+    .asCallback(function (err, result) {
+      if (result.length > 0) {
+        knex('events')
+        .where({ id: result[0].event_id })
+        .select('short_url')
+        .asCallback(function (err, rows) {
+          console.log(rows);
+          let shortURL = rows[0].short_url;
+          res.redirect(`/${shortURL}`);
+        });
+      }
+      else {
+        console.log('Error - please enter dates!');
+      }
+    });
+  });
+});
 app.get("/:shortURL", (req, res) => {
 
 
@@ -173,7 +202,6 @@ app.get("/:shortURL", (req, res) => {
 
   });
 });
-
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);
