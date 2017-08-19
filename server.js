@@ -80,6 +80,16 @@ function cookieCheck(urlCheck, cb) {
     });
 }
 
+function findEventID(cookieCheck, cb) {
+    knex('events')
+    .select('id')
+    .where({cookie_value: cookieCheck})
+    .asCallback(function (err, result) {
+      const eventIDValue = result[0].id;
+      cb(eventIDValue);
+    });
+}
+
 // Home page
 app.get("/", (req, res) => {
   //const user = req.session.user_id;
@@ -147,7 +157,14 @@ app.post("/create", (req, res) => {
 app.get("/:shortURL/create", (req, res) => {
   cookieCheck(req.params.shortURL, function(cv) {
     if (req.session.admin_id == cv) {
+    findEventID(req.session.admin_id, function(id) {
+    knex('events_dates')
+    .where({ event_id: id })
+    .delete()
+    .asCallback(function (err, result) {
       res.render("datesadd");
+    });
+  });
     }
     else {
       res.redirect('/');
@@ -155,11 +172,45 @@ app.get("/:shortURL/create", (req, res) => {
   });
 });
 
-// app.post("/:shortURL/dates", (req, res) => {
-// });
+
+app.post("/date_individual", (req, res) => {
+  findEventID(req.session.admin_id, function(id) {
+    knex('events_dates')
+    .insert({
+      datetime: req.body.date,
+      event_id: id
+    })
+    .asCallback(function (err, result) {
+    });
+  });
+});
+
+app.post("/vote", (req, res) => {
+  findEventID(req.session.admin_id, function(id) {
+    knex('events_dates')
+    .where({ event_id: id })
+    .select('event_id')
+    .asCallback(function (err, result) {
+      if (result.length > 0) {
+        knex('events')
+        .where({ id: result[0].event_id })
+        .select('short_url')
+        .asCallback(function (err, rows) {
+          console.log(rows);
+          let shortURL = rows[0].short_url;
+          res.redirect(`/${shortURL}`);
+        });
+      }
+      else {
+        console.log('Error - please enter dates!');
+      }
+    });
+  });
+});
+
 
 app.get("/:shortURL", (req, res) => {
-  res.render("event");
+  res.render("vote");
 });
 
 
