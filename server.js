@@ -211,15 +211,25 @@ app.post("/vote", (req, res) => {
 
 app.get("/:shortURL", (req, res) => {
 
-
-  knex.from('users')
-  .innerJoin('events_responses', 'users.id', 'events_responses.user_id')
-  .innerJoin('events_dates', 'events_dates.id', 'events_responses.eventsdates_id')
-  .innerJoin('events', 'events_dates.event_id', 'events.id')
-  .select('users.first_name', 'users.last_name', 'events_dates.datetime', 'events_responses.response', 'events.name', 'events.location', 'events.description')
+  knex.from('events')
+  .orderBy('events_responses.user_id', 'asc', 'events_dates.datetime', 'asc')
   .where('events.short_url', req.params.shortURL)
-  .asCallback(function (err, rows) {
-    console.log(rows);
+  .leftJoin('events_dates', 'events.id', 'events_dates.event_id')
+  .leftJoin('events_responses', 'events_dates.id', 'events_responses.eventsdates_id')
+  .leftJoin('users', 'events_responses.user_id', 'users.id')
+  .select('events_responses.user_id', 'users.email', 'events_responses.eventsdates_id', 'events_responses.id', 'users.first_name', 'users.last_name', 'events_dates.datetime', 'events_responses.response', 'events.name', 'events.location', 'events.description')
+  .asCallback(function (err, userResponses) {
+    knex.from('events_dates')
+    .orderBy('events_dates.datetime', 'asc')
+    .where('events.short_url', req.params.shortURL)
+    .distinct('events_dates.id')
+    .innerJoin('events', 'events.id', 'events_dates.event_id')
+    .select('events_dates.datetime', 'events_dates.event_id')
+    .asCallback(function (err, eventDates) {
+      console.log("Response object: ", userResponses);
+      console.log("Events dates object: ", eventDates);
+      res.render('vote', { user_summary: userResponses, event_dates: eventDates });
+    });
   });
 
 
