@@ -159,7 +159,19 @@ app.get("/:shortURL/create", (req, res) => {
 // });
 
 app.get("/:shortURL", (req, res) => {
-  res.render("event");
+
+
+ var short = "CZ1wCsAvYNygel2Es23t";
+  knex('events').select().where({short_url: short}).then(function(result) {
+     res.render("vote",{record:result});
+
+     knex('events_dates').select().where({event_id: result[0].id}).then(function(eventdates){
+      eventdates.forEach(element){
+        knex('events_responses').select().where({eventsdates_id:element.id})
+      }
+     })
+
+  });
 });
 
 
