@@ -51,24 +51,23 @@
     <h2 style="margin-top: 50px">Choose your availability</h2>
         <thead>
             <tr>
-                <th colspan="">Dates =>
+                <th colspan="">Dates
                 </th>
+                <%event_dates.forEach(function(date){%>
                 <th colspan="">
-                    <h5>Date</h5>
+                <%var str = String(date.datetime)%>
+                    <h5><%=str.slice(4,21)%></h5>
                 </th>
-                <th colspan="">
-                    <h5>Date</h5>
-                </th>
-                <th colspan="">
-                    <h5>Date</h5>
+
+                <%});%>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td colspan=""></td>
+            <td colspan=""></td>
+            <%for(var i=0; i<event_dates.length; i++){%>
                 <td colspan=""><input type="checkbox" name="checked" value=""></td>
-                <td colspan=""><input type="checkbox" name="checked" value=""></td>
-                <td colspan=""><input type="checkbox" name="checked" value=""></td>
+            <%};%>
             </tr>
         </tbody>
     </table>
@@ -83,28 +82,34 @@
                 <th colspan="">
                     Participants
                 </th>
+                <%event_dates.forEach(function(date){%>
                 <th colspan="">
-                    <h5>Date</h5>
+                <%var str = String(date.datetime)%>
+                    <h5><%=str.slice(4,21)%></h5>
                 </th>
-                <th colspan="">
-                    <h5>Date</h5>
-                </th>
-                <th colspan="">
-                    <h5>Date</h5>
+
+                <%});%>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td colspan="">Admin</td>
-                <td colspan="">✔</td>
-                <td colspan="">✔</td>
-                <td colspan="">✔</td>
-            </tr>
-            <tr>
-                <td colspan="">User</td>
-                <td colspan="">✔</td>
-                <td colspan="">✗</td>
-                <td colspan="">✗</td>
+
+                <%for(var i=0; i<user_summary.length/event_dates.length;i++){%>
+
+                    <td colspan=""><%=user_summary[i*2].first_name +" "+user_summary[i*2].last_name; %></td>
+                    <%for(var j=0; j<event_dates.length; j++){%>
+                        <%if(user_summary[event_dates.length*i+j].response){%>
+                        <td colspan="">✔</td>
+                        <%}else{%>
+                        <td colspan="">✗</td>
+                        <%};%>
+                    <%}%>
+                    <tr></tr>
+                <%}%>
+                <td>The number of cool people</td>
+                <%for(let i=0; i< event_dates.length; i++){%>
+                    <td></td>
+                <%}%>
             </tr>
         </tbody>
     </table>
