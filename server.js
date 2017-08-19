@@ -212,17 +212,17 @@ app.post("/vote", (req, res) => {
 app.get("/:shortURL", (req, res) => {
 
 
- var short = "CZ1wCsAvYNygel2Es23t";
-  knex('events').select().where({short_url: short}).then(function(result) {
-     res.render("vote",{record:result});
-
-     knex('events_dates').select().where({event_id: result[0].id}).then(function(eventdates){
-      eventdates.forEach(element){
-        knex('events_responses').select().where({eventsdates_id:element.id})
-      }
-     })
-
+  knex.from('users')
+  .innerJoin('events_responses', 'users.id', 'events_responses.user_id')
+  .innerJoin('events_dates', 'events_dates.id', 'events_responses.eventsdates_id')
+  .innerJoin('events', 'events_dates.event_id', 'events.id')
+  .select('users.first_name', 'users.last_name', 'events_dates.datetime', 'events_responses.response', 'events.name', 'events.location', 'events.description')
+  .where('events.short_url', req.params.shortURL)
+  .asCallback(function (err, rows) {
+    console.log(rows);
   });
+
+
 });
 
 
