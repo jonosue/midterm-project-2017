@@ -193,6 +193,7 @@ app.get("/:shortURL/create", (req, res) => {
 
 
 app.post("/date_individual", (req, res) => {
+  if (req.session.admin_id) {
   findEventID(req.session.admin_id, function(id) {
     knex('events_dates')
     .insert({
@@ -202,6 +203,10 @@ app.post("/date_individual", (req, res) => {
     .asCallback(function (err, result) {
     });
   });
+}
+else {
+  res.redirect(req.get('referer'));
+}
 });
 
 app.post("/vote", (req, res) => {
@@ -221,7 +226,7 @@ app.post("/vote", (req, res) => {
         });
       }
       else {
-        console.log('Error - please enter dates!');
+        res.status(404).send('You must enter at least one date in order to create an event!');
       }
     });
   });
