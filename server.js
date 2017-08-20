@@ -171,6 +171,7 @@ app.get("/:shortURL/create", (req, res) => {
       .select('events_responses.user_id', 'users.email', 'events_responses.eventsdates_id', 'events_responses.id', 'users.first_name', 'users.last_name', 'events_dates.datetime', 'events_responses.response', 'events.name', 'events.location', 'events.description')
       .asCallback(function (err, userResponses) {
       res.render("datesadd", {user_summary: userResponses});
+      req.session = null;
     });
   });
 });
@@ -208,7 +209,6 @@ app.post("/vote", (req, res) => {
           console.log(rows);
           let shortURL = rows[0].short_url;
           res.redirect(`/${shortURL}`);
-          req.session = null;
         });
       }
       else {
@@ -220,7 +220,7 @@ app.post("/vote", (req, res) => {
 
 
 app.get("/:shortURL", (req, res) => {
-
+  req.session = null;
   knex.from('events')
   .orderBy('events_responses.user_id', 'asc', 'events_dates.id', 'asc')
   .where('events.short_url', req.params.shortURL)

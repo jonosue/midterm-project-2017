@@ -17,16 +17,17 @@
   <body>
 
   <div class="container">
+  <span>Event's name : </span><br/><span class="fromdata"><%=user_summary[0].name %></span><br/>
+    <span>Event's description : </span><br/><span class="fromdata"><%=user_summary[0].description %></span><br/>
+    <span>Event's location : </span><br/><span class="fromdata"><%= user_summary[0].location %></span><br/>
+    <br>
     <h2>Please add your Information... </h2>
-    <!-- <h4>First Name :&nbsp;&nbsp;&nbsp;&nbsp;<input type="textbox" name="firstname"></h4>
-    <h4>Last Name :&nbsp;&nbsp;&nbsp;&nbsp;<input type="textbox" name="lastname"> </h4>
-    <h4>Email : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="textbox" name="email"> </h4> -->
 <form class='respond' action="/response" method="POST">
 
 <table>
         <thead>
             <tr>
-                <th colspan="">User</th>
+
                 <th colspan="">
                     First Name </th>
                 <th colspan="">
@@ -38,11 +39,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td colspan=""></td>
-                <td colspan=""><input type="text" name="firstname" placeholder="Enter your First Name"></td>
-                <td colspan=""><input type="text" name="lastname" placeholder="Enter your Last Name"></td>
-                <td colspan=""><input type="email" name="email" placeholder="Enter your email address"></td>
+            <tr >
+
+                <td colspan=""  ><input class="textbars" type="text" name="firstname" placeholder="Enter your First Name"></td>
+                <td colspan=""><input class="textbars" type="text" name="lastname" placeholder="Enter your Last Name"></td>
+                <td colspan=""><input class="textbars" type="email" name="email" placeholder="Enter your email address"></td>
             </tr>
         </tbody>
     </table>
@@ -68,9 +69,9 @@
             <tr>
             <td colspan=""></td>
             <% for (var i=0; i < event_dates.length; i++) { %>
-                <td colspan=""><input type="checkbox" name="<%=event_dates[i].id%>"></td>
+                <td colspan="" class="check"><input type="checkbox" name="<%=event_dates[i].id%>"></td>
                 <input name="event_id" type="hidden" value=<%=Number(event_dates[i].event_id)%>>
-            <%};%>
+            <%}%>
             </tr>
         </tbody>
     </table>
@@ -80,7 +81,7 @@
 
 <div class="container">
     <table>
-    <h2 style="margin-top: 50px"> Final List of Participants </h2>
+    <h2 style="margin-top: 50px"> Final List of Participants</h2>
         <thead>
             <tr>
                 <th colspan="">
@@ -114,10 +115,10 @@
                         <tr></tr>
                     <%}%>
 
-                <td>The number of cool people</td>
+                <td class="grey">The number of cool people</td>
 
                 <%for(let i=0; i< event_dates.length; i++){%>
-                    <td><%=cool[i]%></td>
+                    <td class="grey"><%=cool[i]%></td>
                 <%}%>
             <%}%>
             </tr>
@@ -125,6 +126,7 @@
 
 
     </table>
+
 </div>
 
      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
