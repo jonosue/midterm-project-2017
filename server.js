@@ -318,8 +318,14 @@ app.post("/response", (req, res) => {
 
       }
         else {
-        knex('users')
-        .insert({first_name: req.body.firstname, last_name: req.body.lastname, email: req.body.email})
+          checkUser(req.body.email, function(count) {
+            if (count) {
+             knex('users')
+        .where({ email: req.body.email })
+        .update({
+          first_name: req.body.firstname,
+          last_name: req.body.lastname
+        })
        .asCallback(function (err, result) {
           knex('users')
           .select('id')
@@ -354,6 +360,46 @@ app.post("/response", (req, res) => {
          }
        });
       });
+            }
+            else {
+              knex('users')
+              .insert({first_name: req.body.firstname, last_name: req.body.lastname, email: req.body.email})
+              .asCallback(function (err, result) {
+          knex('users')
+          .select('id')
+          .where('email', req.body.email)
+          .asCallback(function (err, result) {
+            for (let i = 0; i < eventsdates_id.length; i++) {
+            knex('events_responses')
+            .rightJoin('users', 'users.id', 'events_responses.user_id')
+            .where('users.email', req.body.email)
+            .insert({
+              eventsdates_id: Number(eventsdates_id[i]),
+              user_id: result[0].id,
+              response: false
+            })
+           .asCallback(function (err, rows) {
+              for (let x in req.body) {
+              knex('users')
+              .select('id')
+              .where('email', req.body.email)
+              .asCallback(function (err, rows) {
+              knex('events_responses')
+              .where('user_id', rows[0].id)
+              .andWhere('eventsdates_id', Number(x))
+              .update({
+                response: true
+              })
+              .asCallback(function (err, rows) {
+              })
+              });
+              };
+           });
+         }
+       });
+      });
+            }
+          });
       }
     });
   };
