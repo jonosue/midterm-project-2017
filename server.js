@@ -162,9 +162,18 @@ app.get("/:shortURL/create", (req, res) => {
     .where({ event_id: id })
     .delete()
     .asCallback(function (err, result) {
-      res.render("datesadd");
+      knex.from('events')
+      .orderBy('events_responses.user_id', 'asc', 'events_dates.id', 'asc')
+      .where('events.short_url', req.params.shortURL)
+      .leftJoin('events_dates', 'events.id', 'events_dates.event_id')
+      .leftJoin('events_responses', 'events_dates.id', 'events_responses.eventsdates_id')
+      .leftJoin('users', 'events_responses.user_id', 'users.id')
+      .select('events_responses.user_id', 'users.email', 'events_responses.eventsdates_id', 'events_responses.id', 'users.first_name', 'users.last_name', 'events_dates.datetime', 'events_responses.response', 'events.name', 'events.location', 'events.description')
+      .asCallback(function (err, userResponses) {
+      res.render("datesadd", {user_summary: userResponses});
     });
   });
+});
     }
     else {
       res.redirect('/');
@@ -236,7 +245,7 @@ app.get("/:shortURL", (req, res) => {
 });
 
 app.post("/response", (req, res) => {
-  console.log(req.body);
+
 });
 
 
