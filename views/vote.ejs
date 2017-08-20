@@ -68,7 +68,8 @@
             <tr>
             <td colspan=""></td>
             <% for (var i=0; i < event_dates.length; i++) { %>
-                <td colspan=""><input type="checkbox" name="<%=event_dates[i].id%>" id="responses"></td>
+                <td colspan=""><input type="checkbox" name="<%=event_dates[i].id%>"></td>
+                <input name="event_id" type="hidden" value=<%=Number(event_dates[i].event_id)%>>
             <%};%>
             </tr>
         </tbody>
