@@ -60,6 +60,17 @@ function checkUser(emailCheck, cb) {
   });
 }
 
+function checkRespondent(emailCheck, cb) {
+   knex('events_responses')
+   .where('users.email', emailCheck)
+   .innerJoin('users', 'events_responses.user_id', 'users.id')
+   .count('email')
+  .asCallback(function (err, result) {
+    const responseValue = Number(result[0].count);
+    cb(responseValue);
+  });
+}
+
 function adminCheck(emailCheck, cb) {
     knex('users')
     .select('id')
@@ -92,7 +103,6 @@ function findEventID(cookieCheck, cb) {
 
 // Home page
 app.get("/", (req, res) => {
-  //const user = req.session.user_id;
   res.render("index");
 });
 
@@ -171,7 +181,6 @@ app.get("/:shortURL/create", (req, res) => {
       .select('events_responses.user_id', 'users.email', 'events_responses.eventsdates_id', 'events_responses.id', 'users.first_name', 'users.last_name', 'events_dates.datetime', 'events_responses.response', 'events.name', 'events.location', 'events.description')
       .asCallback(function (err, userResponses) {
       res.render("datesadd", {user_summary: userResponses});
-      req.session = null;
     });
   });
 });
@@ -206,7 +215,7 @@ app.post("/vote", (req, res) => {
         .where({ id: result[0].event_id })
         .select('short_url')
         .asCallback(function (err, rows) {
-          console.log(rows);
+          req.session = null;
           let shortURL = rows[0].short_url;
           res.redirect(`/${shortURL}`);
         });
@@ -220,7 +229,6 @@ app.post("/vote", (req, res) => {
 
 
 app.get("/:shortURL", (req, res) => {
-  req.session = null;
   knex.from('events')
   .orderBy('events_responses.user_id', 'asc', 'events_dates.id', 'asc')
   .where('events.short_url', req.params.shortURL)
@@ -236,16 +244,115 @@ app.get("/:shortURL", (req, res) => {
     .innerJoin('events', 'events.id', 'events_dates.event_id')
     .select('events_dates.datetime', 'events_dates.event_id')
     .asCallback(function (err, eventDates) {
-      console.log("Response object: ", userResponses);
-      console.log("Events dates object: ", eventDates);
       res.render('vote', { user_summary: userResponses, event_dates: eventDates });
+      req.session = null;
     });
   });
 
 });
 
 app.post("/response", (req, res) => {
+  let event_id = '';
+    if (Array.isArray(req.body.event_id)) {
+      event_id = req.body.event_id
+    }
+    else {
+      event_id = [req.body.event_id]
+    };
+    let eventsdates_id = '';
+    if (Array.isArray(req.body.eventsdates_id)) {
+      eventsdates_id = req.body.eventsdates_id
+    }
+    else {
+      eventsdates_id = [req.body.eventsdates_id]
+    };
+  if (!req.body.firstname || !req.body.lastname || !req.body.email) {
+  }
+  else {
+    checkRespondent(req.body.email, function(count) {
 
+      if (count) {
+        knex('users')
+        .where({ email: req.body.email })
+        .update({
+          first_name: req.body.firstname,
+          last_name: req.body.lastname
+        })
+        .asCallback(function (err, result) {
+          knex('users')
+          .select('id')
+          .where('email', req.body.email)
+          .asCallback(function (err, result) {
+            for (let i = 0; i < eventsdates_id.length; i++) {
+            knex('events_responses')
+            .where('user_id', result[0].id)
+            .andWhere('eventsdates_id', Number(eventsdates_id[i]))
+            .update({
+              response: false
+            })
+           .asCallback(function (err, rows) {
+              for (let x in req.body) {
+              knex('users')
+              .select('id')
+              .where('email', req.body.email)
+              .asCallback(function (err, rows) {
+              knex('events_responses')
+              .where('user_id', rows[0].id)
+              .andWhere('eventsdates_id', Number(x))
+              .update({
+                response: true
+              })
+              .asCallback(function (err, rows) {
+              })
+              });
+              };
+           });
+         }
+       });
+    });
+
+      }
+        else {
+        knex('users')
+        .insert({first_name: req.body.firstname, last_name: req.body.lastname, email: req.body.email})
+       .asCallback(function (err, result) {
+          knex('users')
+          .select('id')
+          .where('email', req.body.email)
+          .asCallback(function (err, result) {
+            for (let i = 0; i < eventsdates_id.length; i++) {
+            knex('events_responses')
+            .rightJoin('users', 'users.id', 'events_responses.user_id')
+            .where('users.email', req.body.email)
+            .insert({
+              eventsdates_id: Number(eventsdates_id[i]),
+              user_id: result[0].id,
+              response: false
+            })
+           .asCallback(function (err, rows) {
+              for (let x in req.body) {
+              knex('users')
+              .select('id')
+              .where('email', req.body.email)
+              .asCallback(function (err, rows) {
+              knex('events_responses')
+              .where('user_id', rows[0].id)
+              .andWhere('eventsdates_id', Number(x))
+              .update({
+                response: true
+              })
+              .asCallback(function (err, rows) {
+              })
+              });
+              };
+           });
+         }
+       });
+      });
+      }
+    });
+  };
+  res.redirect(req.get('referer'));
 });
 
 
