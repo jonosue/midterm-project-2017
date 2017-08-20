@@ -1,13 +1,5 @@
-
-// $(document).on('click', '.input-remove-row', function(){
-//     var tr = $(this).closest('tr');
-//     tr.fadeOut(200, function(){
-//         tr.remove();
-//         calc_total()
-//     });
-// });
-
 $(function(){
+    //clicking on the add button will add the date from date text box
     $('.preview-add-button').click(function(){
         var form_data = {};
         var mydate = $('.payment-form input[name="date"]').val().replace(/T/i, ' At ');

@@ -21,6 +21,8 @@
     <!-- <h4>First Name :&nbsp;&nbsp;&nbsp;&nbsp;<input type="textbox" name="firstname"></h4>
     <h4>Last Name :&nbsp;&nbsp;&nbsp;&nbsp;<input type="textbox" name="lastname"> </h4>
     <h4>Email : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="textbox" name="email"> </h4> -->
+<form class='respond' action="/response" method="POST">
+
 <table>
         <thead>
             <tr>
@@ -38,9 +40,9 @@
         <tbody>
             <tr>
                 <td colspan=""></td>
-                <td colspan=""><input type="text" id ="firstname" value=""></td>
-                <td colspan=""><input type="text" id ="firstname" value=""></td>
-                <td colspan=""><input type="text" id ="firstname" value=""></td>
+                <td colspan=""><input type="text" name="firstname" placeholder="Enter your First Name"></td>
+                <td colspan=""><input type="text" name="lastname" placeholder="Enter your Last Name"></td>
+                <td colspan=""><input type="email" name="email" placeholder="Enter your email address"></td>
             </tr>
         </tbody>
     </table>
@@ -65,14 +67,15 @@
         <tbody>
             <tr>
             <td colspan=""></td>
-            <%for(var i=0; i<event_dates.length; i++){%>
-                <td colspan=""><input type="checkbox" name="checked" value=""></td>
+            <% for (var i=0; i < event_dates.length; i++) { %>
+                <td colspan=""><input type="checkbox" name="<%=event_dates[i].id%>" id="responses"></td>
             <%};%>
             </tr>
         </tbody>
     </table>
 </div>
-<button name="update" style="padding:5px">Update</button>
+<button type="submit" style="padding:5px">Update</button>
+</form>
 
 <div class="container">
     <table>
@@ -91,27 +94,35 @@
                 <%});%>
             </tr>
         </thead>
-        <tbody>
+       <tbody>
             <tr>
+            <%if(user_summary[0].first_name){%>
+                    <%var cool=Array(event_dates.length).fill(0);%>
 
-                <%for(var i=0; i<user_summary.length/event_dates.length;i++){%>
+                    <%for(var i=0; i<user_summary.length/event_dates.length;i++){%>
 
-                    <td colspan=""><%=user_summary[i*2].first_name +" "+user_summary[i*2].last_name; %></td>
-                    <%for(var j=0; j<event_dates.length; j++){%>
-                        <%if(user_summary[event_dates.length*i+j].response){%>
-                        <td colspan="">✔</td>
-                        <%}else{%>
-                        <td colspan="">✗</td>
-                        <%};%>
+                        <td colspan=""><%=user_summary[i*2].first_name +" "+user_summary[i*2].last_name; %></td>
+                        <%for(var j=0; j<event_dates.length; j++){%>
+                            <%if(user_summary[event_dates.length*i+j].response){%>
+                            <%cool[j]+= 1; %>
+                            <td colspan="">✔</td>
+                            <%}else{%>
+                            <td colspan="">✗</td>
+                            <%};%>
+                        <%}%>
+                        <tr></tr>
                     <%}%>
-                    <tr></tr>
-                <%}%>
+
                 <td>The number of cool people</td>
+
                 <%for(let i=0; i< event_dates.length; i++){%>
-                    <td></td>
+                    <td><%=cool[i]%></td>
                 <%}%>
+            <%}%>
             </tr>
         </tbody>
+
+
     </table>
 </div>
 
