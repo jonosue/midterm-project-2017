@@ -3,4 +3,9 @@ node_modules/
 *.log
 *.sqlite3
 .DS_Store
-
+users.js
+routes
+yarn.lock
+.env_example
+wireframes
+public/styles

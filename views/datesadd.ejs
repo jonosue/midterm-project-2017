@@ -1,75 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+      <script src="../scripts/dateform.js"></script>
 
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+      <link rel="stylesheet" href="../styles/create.css" type='text/css'>
 
-    <!-- Website CSS style -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+      <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+      <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-
-    <script src="../styles/dateform.js"></script>
-
-    <!-- Website Font style -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-
-    <link rel="stylesheet" href="/styles/create.css" type='text/css'>
-
-    <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
-
-    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-
-
-    <title>Doodle</title>
-  </head>
-  <body>
-
- <div class="container">
-    <div class="row">
-
-        <!-- panel preview -->
+      <title>Daily Plan-it!</title>
+    </head>
+    <body>
+     <div class="container">
+        <div class="row">
         <div class="col-sm-5">
             <div class="event-info">
-            <h4>Event's name : </h4><p class="events"><%=user_summary[0].name %></p>
-            <h4>Event's description : </h4><p class="events"><%=user_summary[0].description %></p>
-            <h4>Event's location : </h4><p class="events"><%= user_summary[0].location %></p>
+            <h4>Event Name:</h4><p class="events"><%=user_summary[0].name %></p>
+            <h4>Description:</h4><p class="events"><%=user_summary[0].description %></p>
+            <h4>Location:</h4><p class="events"><%= user_summary[0].location %></p>
             </div>
             <br>
             <div class="panel panel-default">
-                <div class="panel-body form-horizontal payment-form">
-                    <div class="form-group">
+              <div class="panel-body form-horizontal payment-form">
+                <div class="form-group">
                 <form class='date-pick' action="/date_individual" method="POST">
-                        <label for="date lable" class="date lable">Add a Date and Time</label>
-                        <div class="col-sm-9">
-                            <input type="datetime-local" class="form-control" id="date" name="date">
-                        </div>
+                  <label for="date lable" class="date lable">Add a Date/Time</label>
+                  <div class="col-sm-9">
+                    <input type="datetime-local" class="form-control" id="date" name="date">
+                  </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 text-right">
+                        <button type="submit" class="btn btn-default preview-add-button">
+                            <span class="glyphicon glyphicon-plus"></span> Add Date
+                        </button>
+                      </form>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-12 text-right">
-                            <button type="submit" class="btn btn-default preview-add-button">
-                                <span class="glyphicon glyphicon-plus"></span> Add Date
-                            </button>
-                          </form>
-                        </div>
-                    </div>
+                  </div>
                 </div>
             </div>
-        </div> <!-- / panel preview -->
+        </div>
         <div class="col-sm-7">
-            <h4>Dates and Times</h4>
+            <h4>Date and Time Options</h4>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="table-responsive">
                         <table class="table preview-table">
                             <thead>
                             </thead>
-                            <tbody></tbody> <!-- preview content goes here-->
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -77,14 +62,13 @@
             <div class="row">
                 <div class="col-xs-12">
                   <form class='submit-all' action="/vote" method="POST">
-                    <button type="submit" class="btn btn-primary btn-block">Submit All and Create Event</button>
+                    <button type="submit" class="btn btn-primary btn-block">Submit Dates & Create Event</button>
                   </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 

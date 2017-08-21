@@ -12,7 +12,6 @@ $(function(){
             $('<td class="input-'+type+'"></td>').html(value).appendTo(row);
         });
         $('.preview-table > tbody:last').append(row);
-        //console.logging (all the dates)
         $(".preview-table tbody tr td").each(function( index, value ) {
         console.log( index + ": " + $(value).text() );
         });

@@ -1,135 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+  <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Website CSS style -->
     <link rel="stylesheet" href="../styles/event.css" type='text/css'>
-
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-
-    <title>Doodle Events</title>
+    <title>Daily Plan-it!</title>
   </head>
-  <body>
+    <body>
+      <div class="container">
+        <span>Event Name:</span><br/><span class="fromdata"><%=user_summary[0].name %></span><br/>
+        <span>Description:</span><br/><span class="fromdata"><%=user_summary[0].description %></span><br/>
+        <span>Location:</span><br/><span class="fromdata"><%= user_summary[0].location %></span>
 
-  <div class="container">
-  <span>Event's name : </span><br/><span class="fromdata"><%=user_summary[0].name %></span><br/>
-    <span>Event's description : </span><br/><span class="fromdata"><%=user_summary[0].description %></span><br/>
-    <span>Event's location : </span><br/><span class="fromdata"><%= user_summary[0].location %></span><br/>
-    <br>
-    <h2>Please add your Information... </h2>
-<form class='respond' action="/response" method="POST">
-
-<table>
-        <thead>
-            <tr>
-
-                <th colspan="">
-                    First Name </th>
-                <th colspan="">
-                    Last Name
-                </th>
-                <th colspan="">
-                    Email
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr >
-
-                <td colspan=""  ><input class="textbars" type="text" name="firstname" placeholder="Enter your First Name". required></td>
-                <td colspan=""><input class="textbars" type="text" name="lastname" placeholder="Enter your Last Name" required></td>
-                <td colspan=""><input class="textbars" type="email" name="email" placeholder="Enter your email address" required></td>
-            </tr>
-        </tbody>
-    </table>
-    </div>
-
-<div class="container">
-    <table>
-    <h2 style="margin-top: 50px">Choose your availability</h2>
-        <thead>
-            <tr>
-                <th colspan="">Dates
-                </th>
+          <table>
+            <h2 style="margin-top: 50px">Results of Voting</h2>
+            <thead>
+              <tr>
+                <th colspan="">Participants</th>
                 <%event_dates.forEach(function(date){%>
                 <th colspan="">
                 <%var str = String(date.datetime)%>
                     <h5><%=str.slice(4,21)%></h5>
                 </th>
                 <%});%>
-            </tr>
-        </thead>
-        <tbody>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+              <%if(user_summary[0].first_name){%>
+                <%var cool=Array(event_dates.length).fill(0);%>
+                <%for(var i=0; i<user_summary.length/event_dates.length;i++){%>
+                <td colspan=""><%=user_summary[i*event_dates.length].first_name +" "+user_summary[i*event_dates.length].last_name; %></td>
+                <%for(var j=0; j<event_dates.length; j++){%>
+                  <%if(user_summary[event_dates.length*i+j].response){%>
+                  <%cool[j]+= 1; %>
+                  <td colspan="">✔</td>
+                  <%}else{%>
+                  <td colspan="">✗</td>
+                  <%};%>
+                <%}%>
+                <tr></tr>
+                <%}%>
+                  <td class="grey">Total Vote Totals</td>
+                  <%for(let i=0; i< event_dates.length; i++){%>
+                  <td class="grey"><%=cool[i]%></td>
+                  <%}%>
+                <%}%>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+      <br />
+      <hr>
+      <br />
+      <div class="container">
+        <h2>Fill out this form to submit your availability for the event.</h2>
+        <strong><em>If you've already filled it out and want to *edit* your response, please fill it out with the same email address you originally used.</em></strong><br /><br /><br />
+        <form class='respond' action="/response" method="POST">
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="">First Name </th>
+                  <th colspan="">Last Name</th>
+                  <th colspan="">Email Address</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr >
+                <td colspan=""><input class="textbars" type="text" name="firstname" placeholder="First Name". required></td>
+                <td colspan=""><input class="textbars" type="text" name="lastname" placeholder="Last Name" required></td>
+                <td colspan=""><input class="textbars" type="email" name="email" placeholder="Email Address" required></td>
+              </tr>
+           </tbody>
+          </table>
+      </div>
+      <div class="container">
+        <table>
+        <h2 style="margin-top: 50px">Please indicate your availability:</h2>
+          <thead>
             <tr>
-            <td colspan=""></td>
-            <% for (var i=0; i < event_dates.length; i++) { %>
+              <th colspan="">Dates</th>
+              <%event_dates.forEach(function(date){%>
+              <th colspan="">
+              <%var str = String(date.datetime)%>
+                <h5><%=str.slice(4,21)%></h5>
+              </th>
+              <%});%>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan=""></td>
+              <% for (var i=0; i < event_dates.length; i++) { %>
                 <td colspan="" class="check"><input type="checkbox" name="<%=event_dates[i].id%>"></td>
                 <input name="event_id" type="hidden" value=<%=Number(event_dates[i].event_id)%>>
                 <input name="eventsdates_id" type="hidden" value=<%=Number(event_dates[i].id)%>>
                 <input name="short_url" type="hidden" value=<%=user_summary[0].short_url%>>
-            <%}%>
+              <%}%>
             </tr>
-        </tbody>
-    </table>
-</div>
-<button type="submit" style="padding:5px">Update</button>
-</form>
-
-<div class="container">
-    <table>
-    <h2 style="margin-top: 50px"> Final List of Participants</h2>
-        <thead>
-            <tr>
-                <th colspan="">
-                    Participants
-                </th>
-                <%event_dates.forEach(function(date){%>
-                <th colspan="">
-                <%var str = String(date.datetime)%>
-                    <h5><%=str.slice(4,21)%></h5>
-                </th>
-                <%});%>
-            </tr>
-        </thead>
-       <tbody>
-            <tr>
-            <%if(user_summary[0].first_name){%>
-                    <%var cool=Array(event_dates.length).fill(0);%>
-                    <%for(var i=0; i<user_summary.length/event_dates.length;i++){%>
-                        <td colspan=""><%=user_summary[i*event_dates.length].first_name +" "+user_summary[i*event_dates.length].last_name; %></td>
-                        <%for(var j=0; j<event_dates.length; j++){%>
-                            <%if(user_summary[event_dates.length*i+j].response){%>
-                            <%cool[j]+= 1; %>
-                            <td colspan="">✔</td>
-                            <%}else{%>
-                            <td colspan="">✗</td>
-                            <%};%>
-                        <%}%>
-                        <tr></tr>
-                    <%}%>
-                <td class="grey">The number of cool people</td>
-                <%for(let i=0; i< event_dates.length; i++){%>
-                    <td class="grey"><%=cool[i]%></td>
-                <%}%>
-            <%}%>
-            </tr>
-        </tbody>
-
-
-    </table>
-
-</div>
-
-     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+          </tbody>
+        </table>
+          <button type="submit" style="padding:5px">Submit</button>
+        </form>
+      </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-
   </body>
 </html>
