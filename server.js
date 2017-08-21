@@ -240,7 +240,7 @@ app.get("/:shortURL", (req, res) => {
   .leftJoin('events_dates', 'events.id', 'events_dates.event_id')
   .leftJoin('events_responses', 'events_dates.id', 'events_responses.eventsdates_id')
   .leftJoin('users', 'events_responses.user_id', 'users.id')
-  .select('events_responses.user_id', 'users.email', 'events_responses.eventsdates_id', 'events_responses.id', 'users.first_name', 'users.last_name', 'events_dates.datetime', 'events_responses.response', 'events.name', 'events.location', 'events.description')
+  .select('events_responses.user_id', 'users.email', 'events.short_url', 'events_responses.eventsdates_id', 'events_responses.id', 'users.first_name', 'users.last_name', 'events_dates.datetime', 'events_responses.response', 'events.name', 'events.location', 'events.description')
   .asCallback(function (err, userResponses) {
     knex.from('events_dates')
     .orderBy('events_dates.id', 'asc')
@@ -264,6 +264,13 @@ app.post("/response", (req, res) => {
     else {
       event_id = [req.body.event_id]
     };
+    let short_url = '';
+    if (Array.isArray(req.body.short_url)) {
+      short_url = req.body.short_url
+    }
+    else {
+      short_url = [req.body.short_url]
+    };
     let eventsdates_id = '';
     if (Array.isArray(req.body.eventsdates_id)) {
       eventsdates_id = req.body.eventsdates_id
@@ -271,11 +278,7 @@ app.post("/response", (req, res) => {
     else {
       eventsdates_id = [req.body.eventsdates_id]
     };
-  if (!req.body.firstname || !req.body.lastname || !req.body.email) {
-  }
-  else {
     checkRespondent(req.body.email, function(count) {
-
       if (count) {
         knex('users')
         .where({ email: req.body.email })
@@ -288,6 +291,7 @@ app.post("/response", (req, res) => {
           .select('id')
           .where('email', req.body.email)
           .asCallback(function (err, result) {
+
             for (let i = 0; i < eventsdates_id.length; i++) {
             knex('events_responses')
             .where('user_id', result[0].id)
@@ -313,9 +317,22 @@ app.post("/response", (req, res) => {
               };
            });
          }
-       });
-    });
 
+        knex('events')
+        .where({ short_url: short_url[0] })
+        .select('short_url')
+        .asCallback(function (err, rows) {
+                 knex('events')
+        .where({ short_url: short_url[0] })
+        .select('short_url')
+        .asCallback(function (err, rows) {
+          let redirect = rows[0].short_url;
+          res.redirect(`/${redirect}`);
+        });
+        });
+
+       })
+    });
       }
         else {
           checkUser(req.body.email, function(count) {
@@ -332,7 +349,7 @@ app.post("/response", (req, res) => {
           .where('email', req.body.email)
           .asCallback(function (err, result) {
             for (let i = 0; i < eventsdates_id.length; i++) {
-            knex('events_responses')
+                 knex('events_responses')
             .rightJoin('users', 'users.id', 'events_responses.user_id')
             .where('users.email', req.body.email)
             .insert({
@@ -358,7 +375,20 @@ app.post("/response", (req, res) => {
               };
            });
          }
-       });
+        knex('events')
+        .where({ short_url: short_url[0] })
+        .select('short_url')
+        .asCallback(function (err, rows) {
+                 knex('events')
+        .where({ short_url: short_url[0] })
+        .select('short_url')
+        .asCallback(function (err, rows) {
+          let redirect = rows[0].short_url;
+          res.redirect(`/${redirect}`);
+        });
+        });
+
+       })
       });
             }
             else {
@@ -396,14 +426,28 @@ app.post("/response", (req, res) => {
               };
            });
          }
-       });
+        knex('events')
+        .where({ short_url: short_url[0] })
+        .select('short_url')
+        .asCallback(function (err, rows) {
+        knex('events')
+        .where({ short_url: short_url[0] })
+        .select('short_url')
+        .asCallback(function (err, rows) {
+          let redirect = rows[0].short_url;
+          res.redirect(`/${redirect}`);
+        });
+        });
+
+       })
+
+
+
       });
             }
           });
       }
     });
-  };
-  res.redirect(req.get('referer'));
 });
 
 

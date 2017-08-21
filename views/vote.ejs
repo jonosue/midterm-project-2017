@@ -71,6 +71,7 @@
                 <td colspan="" class="check"><input type="checkbox" name="<%=event_dates[i].id%>"></td>
                 <input name="event_id" type="hidden" value=<%=Number(event_dates[i].event_id)%>>
                 <input name="eventsdates_id" type="hidden" value=<%=Number(event_dates[i].id)%>>
+                <input name="short_url" type="hidden" value=<%=user_summary[0].short_url%>>
             <%}%>
             </tr>
         </tbody>
