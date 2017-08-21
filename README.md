@@ -1,29 +1,68 @@
-# Node Skeleton
+# Daily Plan-It! - Midterm Project
+### Group Members: Jonathan, Shahab, Esha
+#### (README authored by Jonathan Sue)
 
-## Project Setup
 
-1. Create your own empty repo on GitHub
-2. Clone this repository (do not fork)
-  - Suggestion: When cloning, specify a different folder name that is relevant to your project
-3. Remove the git remote: `git remote rm origin`
-4. Add a remote for your origin: `git remote add origin <your github repo URL>`
-5. Push to the new origin: `git push -u origin master`
-6. Verify that the skeleton code now shows up in your repo on GitHub
+## Overview
+
+For this project, our team chose to create our own version of the popular event planning website, Doodle. We chose this because it fulfills a very important need for people in the modern communication age: it allows people to easily schedule events within a group without much effort. Our job was to do our best to re-create this web application while putting our spin on it.
+
+
+## Functional Requirements
+
+- Visitors can create an event proposal in much the same way as Doodle, by specifying:
+⋅⋅* An event title and description
+⋅⋅* their own name and email
+⋅⋅* organizers can then send the unique URL to possible attendees via their own communication workflow (email, Slack, Messenger, etc.)
+⋅⋅* attendees visit the unique URL and:
+⋅⋅* specify their name and email
+⋅⋅* specify their availability (yes/no only) for each possible time slot
+⋅⋅* view all responses including their own
+⋅⋅* modify their response
+- the unique URL should be secret and thus not use a simple auto-incrementing integer but instead a larger ID that is harder to guess (much like how secret gists work on GitHub)
+- note: this app does not follow the typical user authentication process: users don't need to register or log in and the only way to access the Schoodles is via links
+
+
+## Final Product
+
+!["Screenshot of Main Page"](https://raw.githubusercontent.com/jonosue/midterm-project-2017/master/docs/home-page.png)
+!["Screenshot of Choosing Dates for Event"](https://raw.githubusercontent.com/jonosue/midterm-project-2017/master/docs/choosing-dates.png)
+!["Screenshot of the Page Which Can Be Shared"](https://raw.githubusercontent.com/jonosue/midterm-project-2017/master/docs/date-voting-page.png)
+!["Filling out the Form to Submit Response"](https://raw.githubusercontent.com/jonosue/midterm-project-2017/master/docs/fill-out-form.png)
+!["List with Responses Shown"](https://raw.githubusercontent.com/jonosue/midterm-project-2017/master/docs/list-of-votes.png)
+
 
 ## Getting Started
 
-1. Create the `.env` by using `.env.example` as a reference: `cp .env.example .env`
-2. Update the .env file with your correct local information
-3. Install dependencies: `npm i`
-4. Fix to binaries for sass: `npm rebuild node-sass`
-5. Run migrations: `npm run knex migrate:latest`
-  - Check the migrations folder to see what gets created in the DB
-6. Run the seed: `npm run knex seed:run`
-  - Check the seeds file to see what gets seeded in the DB
-7. Run the server: `npm run local`
-8. Visit `http://localhost:8080/`
+1. Fork this repository, then clone your fork of this repository.
+2. Install dependencies using the `npm install` command.
+3. Start the web server using the `npm run local` command. The app will be served at <http://localhost:8080/>.
+4. Go to <http://localhost:3000/> in your browser.
 
-## Dependencies
 
-- Node 5.10.x or above
-- NPM 3.8.x or above
+## Dependencies, Scripts, and External Requirements/Resources
+
+- body-parser,
+- Bootstrap
+- connect-flash 
+- cookie-session 
+- dotenv 
+- ejs 
+- express 
+- knex 
+- knex-logger 
+- morgan 
+- node-sass-middleware 
+- nodemon
+- npm-install-package
+- npm-install-retry 
+- pg 
+- sqlite3
+
+
+## Contact the Author
+
+Questions? Comments? Please tweet the author of the README at [@JonoSue](http://twitter.com/JonoSue).
+
+
+*Last updated August 21, 2017*

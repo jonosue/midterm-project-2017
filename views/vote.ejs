@@ -13,8 +13,8 @@
       <div class="container">
         <span>Event Name:</span><br/><span class="fromdata"><%=user_summary[0].name %></span><br/>
         <span>Description:</span><br/><span class="fromdata"><%=user_summary[0].description %></span><br/>
-        <span>Location:</span><br/><span class="fromdata"><%= user_summary[0].location %></span>
-
+        <span>Location:</span><br/><span class="fromdata"><%= user_summary[0].location %></span><br /><br />
+        <span style="font-size: 0.9em">*** To share this event with friends, please send the following link: <a href='http://localhost:3000/<%=user_summary[0].short_url%>' target='_blank'>http://localhost:3000/<%=user_summary[0].short_url%>></a></span>s
           <table>
             <h2 style="margin-top: 50px">Results of Voting</h2>
             <thead>
