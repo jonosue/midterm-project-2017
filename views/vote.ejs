@@ -101,7 +101,7 @@
             <%if(user_summary[0].first_name){%>
                     <%var cool=Array(event_dates.length).fill(0);%>
                     <%for(var i=0; i<user_summary.length/event_dates.length;i++){%>
-                        <td colspan=""><%=user_summary[i*2].first_name +" "+user_summary[i*2].last_name; %></td>
+                        <td colspan=""><%=user_summary[i*event_dates.length].first_name +" "+user_summary[i*event_dates.length].last_name; %></td>
                         <%for(var j=0; j<event_dates.length; j++){%>
                             <%if(user_summary[event_dates.length*i+j].response){%>
                             <%cool[j]+= 1; %>
