@@ -24,7 +24,7 @@ app.use(morgan('dev'));
 app.use(cookieSession({
   name: 'session',
   secret: 'hello-world',
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  maxAge: 48 * 60 * 60 * 1000 // 24 hours
 }));
 
 // Log knex SQL queries to STDOUT as well
@@ -235,7 +235,9 @@ app.post("/vote", (req, res) => {
 
 app.get("/:shortURL", (req, res) => {
   knex.from('events')
-  .orderBy('events_responses.user_id', 'asc', 'events_dates.id', 'asc')
+  // .orderBy('events_responses.user_id', 'asc')
+  // .orderBy('events_dates.id', 'desc')
+    .orderByRaw('events_responses.user_id asc, events_dates.id asc')
   .where('events.short_url', req.params.shortURL)
   .leftJoin('events_dates', 'events.id', 'events_dates.event_id')
   .leftJoin('events_responses', 'events_dates.id', 'events_responses.eventsdates_id')
@@ -249,6 +251,8 @@ app.get("/:shortURL", (req, res) => {
     .innerJoin('events', 'events.id', 'events_dates.event_id')
     .select('events_dates.datetime', 'events_dates.event_id')
     .asCallback(function (err, eventDates) {
+      console.log(eventDates);
+      console.log(userResponses);
       res.render('vote', { user_summary: userResponses, event_dates: eventDates });
       req.session = null;
     });
@@ -291,7 +295,7 @@ app.post("/response", (req, res) => {
           .select('id')
           .where('email', req.body.email)
           .asCallback(function (err, result) {
-
+            for (let loop = 0; loop < 1; loop++) {
             for (let i = 0; i < eventsdates_id.length; i++) {
             knex('events_responses')
             .where('user_id', result[0].id)
@@ -304,9 +308,9 @@ app.post("/response", (req, res) => {
               knex('users')
               .select('id')
               .where('email', req.body.email)
-              .asCallback(function (err, rows) {
+              .asCallback(function (err, rowsval) {
               knex('events_responses')
-              .where('user_id', rows[0].id)
+              .where('user_id', rowsval[0].id)
               .andWhere('eventsdates_id', Number(x))
               .update({
                 response: true
@@ -317,7 +321,7 @@ app.post("/response", (req, res) => {
               };
            });
          }
-
+}
         knex('events')
         .where({ short_url: short_url[0] })
         .select('short_url')
@@ -348,6 +352,7 @@ app.post("/response", (req, res) => {
           .select('id')
           .where('email', req.body.email)
           .asCallback(function (err, result) {
+            for (let loop = 0; loop < 1; loop++) {
             for (let i = 0; i < eventsdates_id.length; i++) {
                  knex('events_responses')
             .rightJoin('users', 'users.id', 'events_responses.user_id')
@@ -362,9 +367,9 @@ app.post("/response", (req, res) => {
               knex('users')
               .select('id')
               .where('email', req.body.email)
-              .asCallback(function (err, rows) {
+              .asCallback(function (err, rowsval) {
               knex('events_responses')
-              .where('user_id', rows[0].id)
+              .where('user_id', rowsval[0].id)
               .andWhere('eventsdates_id', Number(x))
               .update({
                 response: true
@@ -375,6 +380,7 @@ app.post("/response", (req, res) => {
               };
            });
          }
+       }
         knex('events')
         .where({ short_url: short_url[0] })
         .select('short_url')
@@ -399,6 +405,7 @@ app.post("/response", (req, res) => {
           .select('id')
           .where('email', req.body.email)
           .asCallback(function (err, result) {
+                        for (let loop = 0; loop < 1; loop++) {
             for (let i = 0; i < eventsdates_id.length; i++) {
             knex('events_responses')
             .rightJoin('users', 'users.id', 'events_responses.user_id')
@@ -413,9 +420,9 @@ app.post("/response", (req, res) => {
               knex('users')
               .select('id')
               .where('email', req.body.email)
-              .asCallback(function (err, rows) {
+              .asCallback(function (err, rowsval) {
               knex('events_responses')
-              .where('user_id', rows[0].id)
+              .where('user_id', rowsval[0].id)
               .andWhere('eventsdates_id', Number(x))
               .update({
                 response: true
@@ -426,6 +433,7 @@ app.post("/response", (req, res) => {
               };
            });
          }
+       }
         knex('events')
         .where({ short_url: short_url[0] })
         .select('short_url')
